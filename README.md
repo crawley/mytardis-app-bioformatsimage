@@ -31,7 +31,7 @@ Here's an example:
 
 Git clone this repository:
     
-       git clone git@github.com:steveandroulakis/mytardis-app-bioformatsimage.git
+       git clone git@github.com:mytardis/mytardis-app-bioformatsimage.git
 Symlink the clone into your MyTardis tree in the `tardis/apps` directory
 
        ln -s .../mytardis-app-bioformatsimage .../mytardis/tardis/apps/bioformatsimage
@@ -50,7 +50,7 @@ Then add the definition for this filter.
 
 ```
 POST_SAVE_FILTERS = [
-   ("tardis.tardis_portal.filters.bioformatsimage.bioformatsimage.make_filter",
+   ("tardis.apps.bioformatsimage.bioformatsimage.make_filter",
    ["BIOFORMATS", "http://tardis.edu.au/schemas/bioformats/1",
     ".../bftools/bfconvert",
      ".../bftools/showinf"]),
