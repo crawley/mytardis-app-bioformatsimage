@@ -1,9 +1,14 @@
-Bioformats Image MyTardis Filter
-===============================
+MyTardis Bioformats Image App
+=============================
 
-_dm3 files only supported for now. However, Bioformats supports [many formats](http://loci.wisc.edu/bio-formats/formats) so potentially so will this filter without much effort._
+This app provides a Mytardis Filter that performs DM3 image to PNG translation
+using the LOCI Bioformats tools.
 
-Filter for generating image thumbnails and storing metadata for MyTardis using LOCI Bioformats' command line binaries that interact with their jar file.
+While only DM3 files are supported for now, Bioformats supports 
+[many formats](http://loci.wisc.edu/bio-formats/formats) so potentially 
+this app could as well, without to much effort._
+
+Here's an example:
 
 ![Screenshot](https://dl.dropbox.com/u/172498/screenshots_host/bioformats-dm3.png)
 
@@ -20,15 +25,18 @@ Filter for generating image thumbnails and storing metadata for MyTardis using L
 
 ## Installation
 
- - Unzip bftools.zip into a directory on the MyTardis server
- - Place loci_tools in the same directory as the unzipped bftools
- - Make sure the MyTardis web server user can read the bftools' directory contents
+ - Unzip bftools.zip into some directory on the MyTardis server.  (Lets call it `.../bftools`)
+ - Place loci_tools in the `.../bftools` directory
+ - Make sure the MyTardis web server user can read the `.../bftools` directory contents
 
-Git clone this repository into `/path/to/mytardis/tardis/tardis_portal/filters`:
+Git clone this repository:
     
-    git clone git@github.com:steveandroulakis/bioformatsimage-mytardis-filter.git bioformatsimage
+       git clone git@github.com:steveandroulakis/mytardis-app-bioformatsimage.git
+Symlink the clone into your MyTardis tree in the `tardis/apps` directory
 
-Add the following to your MyTardis settings file eg. `/path/to/mytardis/tardis/settings.py`
+       ln -s .../mytardis-app-bioformatsimage .../mytardis/tardis/apps/bioformatsimage
+
+Add the following to your MyTardis settings file eg. `.../mytardis/tardis/settings.py`
 
 ```
 MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('tardis.tardis_portal.filters.FilterInitMiddleware',)
@@ -44,17 +52,15 @@ Then add the definition for this filter.
 POST_SAVE_FILTERS = [
    ("tardis.tardis_portal.filters.bioformatsimage.bioformatsimage.make_filter",
    ["BIOFORMATS", "http://tardis.edu.au/schemas/bioformats/1",
-    "/path/to/bftools/bfconvert",
-     "/path/to/bftools/showinf"]),
+    ".../bftools/bfconvert",
+     ".../bftools/showinf"]),
    ]
 ```
 
-Where the bftools directory is correct for your installation.
-
-`cd /path/to/mytardis` and load the parameter schema into the MyTardis database:
+`cd .../mytardis` and load the parameter schema into the MyTardis database:
 
 ```
-bin/django loaddata tardis/tardis_portal/filters/bioformatsimage/bioformats.json
+bin/django loaddata tardis/apps/bioformatsimage/bioformats.json
 ```
 
 Restart MyTardis. From now on, all dm3 files loaded will have preview images and metadata extracted and stored alongside the file itself.
